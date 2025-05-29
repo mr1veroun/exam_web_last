@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ collection.name }}{% endblock %}
+{% block content %}
+<h3>Подборка: {{ collection.name }}</h3>
+{% if collection.books %}
+    <ul>
+    {% for book in collection.books %}
+        <li>
+            <a href="{{ url_for('books.view_book', book_id=book.id) }}">{{ book.title }}</a>
+            ({{ book.author }})
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>В подборке пока нет книг.</p>
+{% endif %}
+<a href="{{ url_for('collections.my_collections') }}" class="btn btn-secondary">Назад</a>
+{% endblock %}

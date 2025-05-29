@@ -1,0 +1,64 @@
+{% macro render_book_form(form, is_create=True) %}
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control") }}
+            {% for error in form.title.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.short_description.label(class="form-label") }}
+            {{ form.short_description(class="form-control", id="markdown-editor") }}
+            {% for error in form.short_description.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.year.label(class="form-label") }}
+            {{ form.year(class="form-control") }}
+            {% for error in form.year.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.publisher.label(class="form-label") }}
+            {{ form.publisher(class="form-control") }}
+            {% for error in form.publisher.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.author.label(class="form-label") }}
+            {{ form.author(class="form-control") }}
+            {% for error in form.author.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.pages.label(class="form-label") }}
+            {{ form.pages(class="form-control") }}
+            {% for error in form.pages.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.genres.label(class="form-label") }}
+            {{ form.genres(class="form-select", multiple=True) }}
+            {% for error in form.genres.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% if is_create %}
+        <div class="mb-3">
+            {{ form.cover.label(class="form-label") }}
+            {{ form.cover(class="form-control") }}
+            {% for error in form.cover.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+    </form>
+{% endmacro %}

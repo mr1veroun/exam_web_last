@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Написать рецензию{% endblock %}
+
+{% block content %}
+<h3>Написать рецензию</h3>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.rating.label(class="form-label") }}
+        {{ form.rating(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        {{ form.text.label(class="form-label") }}
+        {{ form.text(class="form-control", rows=6) }}
+        <div class="form-text">
+            Поддерживается <a href="https://ru.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">{{ form.submit.label.text }}</button>
+    <a href="{{ url_for('books.view_book', book_id=book.id) }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

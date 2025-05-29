@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Мои подборки{% endblock %}
+{% block content %}
+<h3>Мои подборки</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Кол-во книг</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in collections %}
+        <tr>
+            <td>{{ c.name }}</td>
+            <td>{{ c.books|length }}</td>
+            <td>
+                <a href="{{ url_for('collections.view_collection', collection_id=c.id) }}" class="btn btn-sm btn-primary">Просмотр</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCollectionModal">Добавить подборку</button>
+
+<div class="modal fade" id="addCollectionModal" tabindex="-1" aria-labelledby="addCollectionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="addCollectionForm" method="post">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCollectionModalLabel">Новая подборка</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="text" name="name" class="form-control" placeholder="Название подборки" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-success">Добавить</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('addCollectionForm').onsubmit = function(e) {
+    e.preventDefault();
+    fetch('{{ url_for("collections.add_collection") }}', {
+        method: 'POST',
+        body: new FormData(this),
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            window.location.href = data.redirect;
+        } else {
+            alert(data.message);
+        }
+    });
+};
+</script>
+{% endblock %}

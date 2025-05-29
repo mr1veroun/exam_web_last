@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Статистика{% endblock %}
+{% block content %}
+<ul class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'log' %}active{% endif %}" href="{{ url_for('admin.stats', tab='log') }}">Журнал действий пользователей</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {% if tab == 'stats' %}active{% endif %}" href="{{ url_for('admin.stats', tab='stats') }}">Статистика просмотра книг</a>
+  </li>
+</ul>
+
+{% if tab == 'log' %}
+  <a href="{{ url_for('admin.export_stats', tab='log') }}" class="btn btn-outline-secondary mb-2">Экспорт в CSV</a>
+  <table class="table">
+    <thead>
+      <tr><th>№</th><th>Пользователь</th><th>Книга</th><th>Дата и время</th></tr>
+    </thead>
+    <tbody>
+      {% for v in pagination.items %}
+        <tr>
+          <td>{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+          <td>{% if v.user %}{{ v.user.last_name }} {{ v.user.first_name }}{% else %}Неаутентифицированный пользователь{% endif %}</td>
+          <td>{{ v.book.title }}</td>
+          <td>{{ v.viewed_at.strftime('%d.%m.%Y %H:%M') }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {# {% include 'pagination.html' %} #}
+{% elif tab == 'stats' %}
+  <form method="get" class="mb-3">
+    <input type="hidden" name="tab" value="stats">
+    <label>Дата от: <input type="date" name="date_from" value="{{ date_from or '' }}"></label>
+    <label>Дата до: <input type="date" name="date_to" value="{{ date_to or '' }}"></label>
+    <button type="submit" class="btn btn-primary btn-sm">Применить</button>
+    <a href="{{ url_for('admin.export_stats', tab='stats', date_from=date_from, date_to=date_to) }}" class="btn btn-outline-secondary btn-sm">Экспорт в CSV</a>
+  </form>
+  <table class="table">
+    <thead>
+      <tr><th>№</th><th>Книга</th><th>Количество просмотров</th></tr>
+    </thead>
+    <tbody>
+      {% for row in pagination.items %}
+        <tr>
+          <td>{{ loop.index + (pagination.page - 1) * pagination.per_page }}</td>
+          <td>{{ row[0] }}</td>
+          <td>{{ row[1] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {# {% include 'pagination.html' %} #}
+{% endif %}
+{% endblock %}

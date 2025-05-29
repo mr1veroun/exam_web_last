@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}
+    {% if mode == 'edit' %}Редактировать книгу{% else %}Добавить книгу{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2>{% if mode == 'edit' %}Редактировать книгу{% else %}Добавить книгу{% endif %}</h2>
+<form method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control", rows=6) }}
+        <div class="form-text">Поддерживается Markdown</div>
+    </div>
+    <div class="mb-3">
+        {{ form.year.label(class="form-label") }}
+        {{ form.year(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.publisher.label(class="form-label") }}
+        {{ form.publisher(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.author.label(class="form-label") }}
+        {{ form.author(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.pages.label(class="form-label") }}
+        {{ form.pages(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.genres.label(class="form-label") }}
+        {{ form.genres(class="form-select", multiple=true) }}
+    </div>
+    {# Поле обложки только при добавлении #}
+    {% if mode != 'edit' %}
+    <div class="mb-3">
+        {{ form.cover.label(class="form-label") }}
+        {{ form.cover(class="form-control") }}
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-success">{{ form.submit.label.text }}</button>
+    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
